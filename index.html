@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Laboratorio IA · Sanitario de Combate en Operaciones Especiales — 15 simuladores</title>
+<style>
+:root{
+  --bg:#0b1220; --panel:#121b2e; --panel2:#182446; --text:#e8edf7; --muted:#93a1c2;
+  --accent:#ff8a3d; --accent2:#3dd9ff; --danger:#ff5c6c; --border:#26335a;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,#1a2648 0%,var(--bg) 60%);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+header{max-width:1000px;margin:0 auto;padding:36px 20px 10px;}
+header .kicker{color:var(--accent2);font-size:.85rem;text-transform:uppercase;letter-spacing:.08em;}
+header h1{font-size:1.8rem;margin:8px 0 4px;}
+header p{color:var(--muted);line-height:1.6;font-size:.95rem;max-width:760px;}
+.pills{margin:14px 0;}
+.pill{display:inline-block;background:var(--panel2);border:1px solid var(--border);border-radius:999px;padding:4px 12px;font-size:.75rem;color:var(--muted);margin:0 6px 6px 0;}
+.disclaimer{max-width:1000px;margin:10px auto 30px;padding:16px 20px;border:1px solid var(--danger);border-radius:12px;background:rgba(255,92,108,.06);color:#ffc9ce;font-size:.85rem;line-height:1.6;}
+.disclaimer b{color:#fff;}
+main{max-width:1000px;margin:0 auto;padding:0 20px 60px;}
+h2.section{font-size:1rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:34px 0 14px;border-bottom:1px solid var(--border);padding-bottom:8px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;}
+.card{display:block;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px;text-decoration:none;color:var(--text);transition:.15s;}
+.card:hover{border-color:var(--accent2);transform:translateY(-2px);}
+.card .icon{font-size:1.5rem;}
+.card h3{margin:8px 0 2px;font-size:1rem;}
+.card .tag{color:var(--accent2);font-size:.8rem;display:block;margin-bottom:6px;}
+.card p{color:var(--muted);font-size:.82rem;line-height:1.5;margin:0;}
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:20px 12px 50px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">Universidad Miguel Hernández de Elche (UMH) · Formación en Sanidad Militar y Operaciones Especiales</div>
+  <h1>Laboratorio de simulación con IA: 15 apps de repaso</h1>
+  <p>Cada app es un simulador de práctica deliberada vinculado a un módulo del curso <b>Sanitario de Combate en Operaciones Especiales</b>: genera un
+  escenario táctico-clínico realista, te sitúa en el rol del sanitario de combate, te enfrenta a pacientes, instructores
+  y equipos de IA que evolucionan con tus decisiones, y evalúa tu desempeño con una rúbrica exportable. Todo funciona en
+  el navegador, sin servidor: solo necesitas tu clave de API de OpenAI (botón 🔑 dentro de cada app).</p>
+  <div class="pills">
+    <span class="pill">15 apps</span>
+    <span class="pill">Simulación táctico-clínica TCCC</span>
+    <span class="pill">Rúbrica exportable</span>
+    <span class="pill">gpt-4o-mini</span>
+    <span class="pill">Sin backend · uso local</span>
+  </div>
+</header>
+
+<div class="disclaimer">
+  <b>⚠ Aviso docente y de seguridad:</b> estas herramientas son <b>simuladores formativos</b> para el aprendizaje del
+  módulo TCCC/CoTCCC del curso. <b>No sustituyen el juicio clínico-táctico, los protocolos oficiales ni la supervisión
+  docente</b>, y ningún contenido generado debe emplearse en pacientes reales ni en operaciones reales. Verifica siempre
+  procedimientos, dosis y protocolos con las fuentes oficiales vigentes (CoTCCC/TCCC, JTS, protocolos de la unidad).
+  La clave de API se almacena solo en <code>localStorage</code> del estudiante y las llamadas van directas a la API de
+  OpenAI; ningún dato pasa por servidores intermedios.
+</div>
+
+<main>
+  <h2 class="section">Fase 1 · Care Under Fire y control de hemorragias</h2>
+  <div class="grid">
+    <a class="card" href="care-under-fire.html">
+      <span class="icon">🔥</span>
+      <h3>BajoFuego·AI</h3>
+      <span class="tag">La primera decisión: moverse o morir</span>
+      <p>Fase Care Under Fire: bajo fuego real, decide cuándo devolver fuego, cuándo arrastrar a la baja y cuándo aplicar solo el torniquete que salva la vida. El instructor de IA audita tu prioridad táctica sobre la médica.</p>
+    </a>
+    <a class="card" href="hemorragia-masiva.html">
+      <span class="icon">🩸</span>
+      <h3>HemorragiaX·AI</h3>
+      <span class="tag">El minuto de oro del sangrado catastrófico</span>
+      <p>Control de hemorragias masivas (M de MARCH): torniquetes, apósitos hemostáticos y compresión. Un instructor de IA revisa tu técnica y el reloj de exanguinación no perdona errores.</p>
+    </a>
+
+  </div>
+
+  <h2 class="section">Fase 2 · Tactical Field Care (MARCH)</h2>
+  <div class="grid">
+    <a class="card" href="via-aerea-tactica.html">
+      <span class="icon">🫁</span>
+      <h3>VíaAéreaTáctica·AI</h3>
+      <span class="tag">A de Airway: abre camino al aire</span>
+      <p>Manejo de la vía aérea en el paciente de combate: posición, cánula nasofaríngea, maniobras y cricotiroidotomía cuando todo lo demás falla. La saturación de IA cae si te demoras.</p>
+    </a>
+    <a class="card" href="torax-tactico.html">
+      <span class="icon">💨</span>
+      <h3>TóraxTáctico·AI</h3>
+      <span class="tag">El tórax que no puede esperar</span>
+      <p>Neumotórax a tensión y heridas torácicas abiertas: sellado torácico y descompresión con aguja. El paciente de IA se descompensa si no reconoces los signos a tiempo.</p>
+    </a>
+    <a class="card" href="shock-hemorragico.html">
+      <span class="icon">💉</span>
+      <h3>ShockCombate·AI</h3>
+      <span class="tag">Circulación: reponer sin ahogar</span>
+      <p>Shock hemorrágico en combate: acceso IV/IO, reanimación con hemoderivados o cristaloides y ácido tranexámico. Un intensivista de IA valora tu estrategia de reanimación controlada.</p>
+    </a>
+    <a class="card" href="hipotermia-tce.html">
+      <span class="icon">🧊</span>
+      <h3>HipotermiaTCE·AI</h3>
+      <span class="tag">El frío mata tanto como la bala</span>
+      <p>Prevención de la hipotermia y manejo del traumatismo craneoencefálico en el paciente de combate. La IA vigila temperatura y pupilas mientras decides.</p>
+    </a>
+
+  </div>
+
+  <h2 class="section">Fase 3 · TACEVAC, triaje y documentación</h2>
+  <div class="grid">
+    <a class="card" href="triaje-tactico.html">
+      <span class="icon">🏷</span>
+      <h3>TriajeTáctico·AI</h3>
+      <span class="tag">Varias bajas, un solo sanitario</span>
+      <p>Triaje con múltiples bajas en combate: START/TCCC, prioriza recursos limitados y justifica cada decisión ante un adjunto de IA que cuestiona tus criterios.</p>
+    </a>
+    <a class="card" href="evacuacion-tactica.html">
+      <span class="icon">🚁</span>
+      <h3>EvacuaciónTáctica·AI</h3>
+      <span class="tag">De la escena al hospital sin perder terreno ganado</span>
+      <p>TACEVAC: prepara la baja, elige medio y punto de evacuación, y transmite el parte MIST/9-line a una central de IA que coordina el recurso.</p>
+    </a>
+    <a class="card" href="informe-tactico.html">
+      <span class="icon">📋</span>
+      <h3>InformeTáctico·AI</h3>
+      <span class="tag">Lo que no se documenta, no existe</span>
+      <p>Documentación TCCC (tarjeta de baja) y comunicación estructurada MIST/SBAR con el escalón sanitario siguiente. Un oficial de IA evalúa la claridad y trazabilidad de tu parte.</p>
+    </a>
+
+  </div>
+
+  <h2 class="section">Módulos especiales y transversales</h2>
+  <div class="grid">
+    <a class="card" href="analgesia-combate.html">
+      <span class="icon">💊</span>
+      <h3>AnalgesiaCombate·AI</h3>
+      <span class="tag">Tratar el dolor sin perder al combatiente</span>
+      <p>Analgesia y antibioterapia TCCC: elige fármaco, vía y dosis según la situación táctica y el estado del paciente. Un farmacólogo de IA revisa tu prescripción en campo.</p>
+    </a>
+    <a class="card" href="quemaduras-tacticas.html">
+      <span class="icon">🔥</span>
+      <h3>QuemadurasTácticas·AI</h3>
+      <span class="tag">Superficie, vía aérea y fluidos: la regla de los tres</span>
+      <p>Quemaduras en el entorno táctico: calcula superficie corporal quemada, vigila la vía aérea por inhalación y ajusta la reposición de fluidos. La IA simula la evolución cutánea y respiratoria.</p>
+    </a>
+    <a class="card" href="blast-injury.html">
+      <span class="icon">💥</span>
+      <h3>BlastInjury·AI</h3>
+      <span class="tag">Cuatro mecanismos, una sola explosión</span>
+      <p>Lesión por onda expansiva: identifica lesiones primarias, secundarias, terciarias y cuaternarias tras una explosión. El equipo de IA presenta hallazgos ocultos que debes buscar activamente.</p>
+    </a>
+    <a class="card" href="nrbq.html">
+      <span class="icon">☣</span>
+      <h3>NRBQ·AI</h3>
+      <span class="tag">Cuando el entorno también es el enemigo</span>
+      <p>Bajas en ambiente NRBQ (nuclear, radiológico, biológico, químico): protección personal, descontaminación y antídotos específicos. La IA simula la exposición y su evolución.</p>
+    </a>
+    <a class="card" href="paliativo-expectante.html">
+      <span class="icon">🕊</span>
+      <h3>CampoTáctico·AI</h3>
+      <span class="tag">Cuidados cuando el recurso no alcanza</span>
+      <p>Manejo del paciente expectante y cuidados paliativos de campaña: comodidad, analgesia y comunicación humana cuando la evacuación o el pronóstico no lo permiten todo. La IA plantea el dilema con realismo.</p>
+    </a>
+    <a class="card" href="etica-liderazgo.html">
+      <span class="icon">⚖</span>
+      <h3>ÉticaOperaciones·AI</h3>
+      <span class="tag">El marco legal y humano de tu decisión</span>
+      <p>Ética, derecho de los conflictos armados y liderazgo sanitario en operaciones especiales: atención a heridos enemigos, secreto médico en operaciones y toma de decisiones bajo presión de mando. Un comité de IA audita tu razonamiento.</p>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  Laboratorio IA · Sanitario de Combate en Operaciones Especiales · Universidad Miguel Hernández de Elche (UMH)<br>
+  Simuladores docentes de uso interno · No constituyen instrucción operativa real · No sustituyen el juicio clínico-táctico ni los protocolos oficiales
+</footer>
+</body>
+</html>
