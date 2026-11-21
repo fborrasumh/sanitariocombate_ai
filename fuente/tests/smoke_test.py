@@ -12,7 +12,7 @@ async def reply(prov, system, user, info):
     if 'motor de interpretación' in user:   # IA simulada: una orden válida + una INVENTADA que el código debe descartar
         return ('j', {'acciones': ['tq', 'inyectar_morfina_magica'], 'respuesta': '¡Aprieta fuerte, me desangro!', 'rol': 'baja'})
     if 'consejos' in user:   # comentario de debriefing: una página válida y otra INVENTADA
-        return ('j', {'consejos': [{'texto': 'Marca siempre la hora del torniquete.', 'p': '8'}, {'texto': 'Consulta el anexo secreto.', 'p': '999'}]})
+        return ('j', {'consejos': [{'texto': 'Marca siempre la hora del torniquete.', 'punto': 'marca'}, {'texto': 'Consulta el anexo secreto.', 'punto': 'punto_inventado'}]})
     return ('j', {})
 
 async def main():
@@ -68,7 +68,7 @@ async def main():
         ok('inyectar_morfina_magica' in log and 'descartado' in log, 'la orden inventada se descarta y se avisa')
         await p.evaluate("t => window.simulaVoz(t)", 'fin de la simulación'); await h.esp("step === 3")
         await p.click('#btnIADeb'); await p.wait_for_timeout(900); ia = await p.inner_text('#iaDebTxt')
-        ok('✓ p. 8' in ia and '999' in ia and 'no está en esta sesión' in ia, 'debriefing IA: la página inventada se marca')
+        ok('✓ Marca la hora del torniquete' in ia and 'punto_inventado' in ia and 'no existe en esta rúbrica' in ia, 'debriefing IA: el punto inventado se marca')
 
         print('6) Instructor: reunir resultados')
         await p.evaluate("go(4)"); await p.set_input_files('#iFiles', [str(OUT / 'res_asm.json')]); await p.wait_for_timeout(300)

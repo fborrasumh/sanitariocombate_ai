@@ -1,10 +1,10 @@
 {
   "slug": "sanitariocombate_ai",
   "name": "SanitarIA de Combate",
-  "tagline": "Simulador por voz de atención táctica a bajas (TCCC/NSOCM)",
-  "eyebrow": "Simulador por voz · TCCC y NSOCM Handbook 2023 · Universidad Miguel Hernández de Elche",
+  "tagline": "Simulador por voz de atención táctica a bajas (TCCC)",
+  "eyebrow": "Simulador por voz · TCCC · Universidad Miguel Hernández de Elche",
   "h1": "Habla como en el terreno. *El simulador responde, mide y corrige.*",
-  "lede": "Quince escenarios de atención táctica a bajas para cuatro niveles, del combatiente al médico. Das las órdenes con tu voz; el código lleva la fisiología de la baja y el reloj, y puntúa cada decisión citando la página del manual.",
+  "lede": "Quince escenarios de atención táctica a bajas para cuatro niveles, del combatiente al médico. Das las órdenes con tu voz; el código lleva la fisiología de la baja y el reloj, y puntúa cada decisión.",
   "logo_icon": "shield",
   "ia": true,
   "lang": "es",
@@ -29,16 +29,16 @@
   ],
   "i18n": {
     "en": {
-      "title": "SanitarIA de Combate · Voice simulator for tactical casualty care",
-      "eyebrow": "Voice simulator · TCCC and NSOCM Handbook 2023 · Miguel Hernández University of Elche",
+      "title": "SanitarIA de Combate · Voice simulator for tactical casualty care (TCCC)",
+      "eyebrow": "Voice simulator · TCCC · Miguel Hernández University of Elche",
       "h1": "Speak as you would in the field. *The simulator answers, measures and corrects.*",
-      "lede": "Fifteen tactical casualty care scenarios for four levels, from every service member to the physician. You give orders with your voice; the code runs the casualty's physiology and the clock, and scores every decision citing the handbook page."
+      "lede": "Fifteen tactical casualty care scenarios for four levels, from every service member to the physician. You give orders with your voice; the code runs the casualty's physiology and the clock, and scores every decision."
     },
     "pt": {
-      "title": "SanitarIA de Combate · Simulador por voz de cuidados táticos a feridos",
-      "eyebrow": "Simulador por voz · TCCC e NSOCM Handbook 2023 · Universidade Miguel Hernández de Elche",
+      "title": "SanitarIA de Combate · Simulador por voz de cuidados táticos a feridos (TCCC)",
+      "eyebrow": "Simulador por voz · TCCC · Universidade Miguel Hernández de Elche",
       "h1": "Fale como no terreno. *O simulador responde, mede e corrige.*",
-      "lede": "Quinze cenários de cuidados táticos a feridos para quatro níveis, do combatente ao médico. Dá as ordens com a sua voz; o código gere a fisiologia do ferido e o relógio, e pontua cada decisão citando a página do manual."
+      "lede": "Quinze cenários de cuidados táticos a feridos para quatro níveis, do combatente ao médico. Dá as ordens com a sua voz; o código gere a fisiologia do ferido e o relógio, e pontua cada decisão."
     }
   },
   "authors": [
@@ -52,9 +52,9 @@
   "catalog": {
     "cat": "sim",
     "icon": "ti-first-aid-kit",
-    "sub_es": "Simulador por voz TCCC/NSOCM",
+    "sub_es": "Simulador por voz TCCC",
     "desc_es": "Quince escenarios de atención táctica a bajas por voz, con fisiología y rúbrica calculadas por código.",
-    "sub_en": "TCCC/NSOCM voice simulator",
+    "sub_en": "TCCC voice simulator",
     "desc_en": "Fifteen voice-driven tactical casualty care scenarios, with physiology and rubric computed by code.",
     "tit_es": "SanitarIA de Combate",
     "comp_es": "Sanitario de Combate en Operaciones Especiales (UMH)",

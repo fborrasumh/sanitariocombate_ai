@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Si usas este software, cítalo con estos metadatos."
-title: "SanitarIA de Combate: simulador por voz de atención táctica a bajas (TCCC/NSOCM)"
+title: "SanitarIA de Combate: simulador por voz de atención táctica a bajas (TCCC)"
 type: software
 authors:
   - family-names: "Borrás Rocher"
@@ -13,4 +13,4 @@ date-released: "2026-11-21"
 url: "https://fborrasumh.github.io/sanitariocombate_ai/"
 repository-code: "https://github.com/fborrasumh/sanitariocombate_ai"
 license: MIT
-keywords: ["TCCC", "NSOCM", "simulación", "voz", "sanidad militar", "Web Speech API"]
+keywords: ["TCCC", "simulación", "voz", "sanidad militar", "Web Speech API"]

@@ -7,10 +7,10 @@ const HUBS = ['Instructor', 'Órdenes y protocolos', 'Mi progreso'];
 const NAV = [['Empezar', 'Prueba el ejemplo: funciona sin clave de IA.'], ['Comenzar la simulación', 'Elige nivel y escenario.'], ['Terminar y ver el debriefing', 'Habla o escribe tus órdenes.'], ['Volver al inicio', 'Descarga tu informe o repite el escenario.']];
 const RENDER = {0: pintaInicio, 1: pintaPrep, 2: pintaSim, 3: pintaDebrief, 4: pintaInstr, 5: pintaOrdenes, 6: pintaProgreso};
 const GLOS = [
-  ['¿Qué es?', 'Un simulador por voz de atención táctica a bajas con 15 escenarios del NSOCM Handbook 2023 (OTAN) y cuatro niveles: todo combatiente (ASM), socorrista (CLS), sanitario de combate (CMC/NSOCM) y médico o enfermero (CPP).'],
+  ['¿Qué es?', 'Un simulador por voz de atención táctica a bajas con 15 escenarios basados en las guías de atención táctica a bajas (TCCC) y cuatro niveles: todo combatiente (ASM), socorrista (CLS), sanitario de combate (CMC) y médico o enfermero (CPP).'],
   ['Voz', 'Pulsa el micrófono (o mantén la barra espaciadora) y da la orden como en el terreno. Con «manos libres» escucha sin parar. El reconocimiento lo hace tu navegador, gratis: Chrome y Edge lo envían a Google o Microsoft y necesitan red; Safari usa el de Apple; Firefox no tiene, y entonces se escribe.'],
   ['¿Quién decide qué?', 'El código lleva la fisiología de cada baja, el reloj y la rúbrica. La IA, si la activas, solo traduce frases que el simulador no entiende a órdenes del catálogo y redacta un comentario final; nunca puntúa.'],
-  ['Rúbrica', 'Alineada con la Trauma Grade Sheet (p. 192) y las Skills Sheets (p. 193-197). Cada punto cita su página. Los puntos críticos valen doble y un fallo crítico impide el APTO.'],
+  ['Rúbrica', 'Cada escenario tiene su lista de puntos, que el código comprueba con el registro de la sesión. Los puntos críticos valen doble y un fallo crítico impide el APTO.'],
   ['Niveles', 'Si das una orden fuera del alcance de tu nivel, el simulador no la ejecuta, te dice a quién pedírsela y lo anota como fallo crítico.'],
   ['Instructor', 'En «Instructor» generas un código de sesión común, inyectas complicaciones durante la simulación y reúnes los JSON de tu grupo en una tabla con la dificultad de cada punto.'],
   ['Privacidad', 'Todo se guarda en este navegador. Tu voz sale hacia el servicio de reconocimiento del navegador: no digas datos reales. Si activas la IA, salen las frases no reconocidas y el resumen del debriefing, sin tu seudónimo.'],
@@ -22,7 +22,7 @@ let ENVIO_OK = false;
 const NIV_TXT = {
   ASM: ['Todo combatiente (ASM)', 'Autoayuda y ayuda a un compañero: torniquete, empaquetado, presión, posición lateral, parche torácico, hipotermia e informar.'],
   CLS: ['Socorrista de combate (CLS)', 'Además: cánula nasofaríngea, descompresión con aguja, faja pélvica, MACE 2, 9 líneas y MIST.'],
-  CMC: ['Sanitario de combate / NSOCM (CMC)', 'Además: vías IV/IO, ácido tranexámico, sangre total, analgesia, cricotiroidotomía, toracostomía y conversión del torniquete.'],
+  CMC: ['Sanitario de combate (CMC)', 'Además: vías IV/IO, ácido tranexámico, sangre total, analgesia, cricotiroidotomía, toracostomía y conversión del torniquete.'],
   CPP: ['Médico / enfermero de combate (CPP)', 'Todo lo anterior, más certificar el fallecimiento y las decisiones de control médico.']
 };
 const CATS = {M: 'M · Hemorragia', A: 'A · Vía aérea', R: 'R · Respiración', C: 'C · Circulación', H: 'H · Cabeza e hipotermia', E: 'Evaluación', P: 'Dolor, fármacos y lesiones', K: 'Comunicación y evacuación', T: 'Triaje y final de la vida'};
@@ -46,7 +46,7 @@ function pintaPrep() {
   $('niveles').innerHTML = NIVELES.map(n => `<button type="button" role="radio" class="sc-niv" aria-checked="${S.nivel === n}" data-niv="${n}"><b>${esc(t(NIV_TXT[n][0]))}</b><span>${esc(t(NIV_TXT[n][1]))}</span></button>`).join('');
   $$('#niveles [data-niv]').forEach(b => b.onclick = () => { S.nivel = b.dataset.niv; guarda(); pintaPrep(); });
   const mejor = (e, n) => Math.max(-1, ...S.hist.filter(h => h.esc === e && h.nivel === n).map(h => h.pct));
-  $('escenarios').innerHTML = [1, 2, 3, 4].map(f => `<h4 class="sc-fase">${esc(t(FASES[f]))}</h4><div class="sc-escs">${ESC.filter(e => e.fase === f).map(e => { const m = mejor(e.id, S.nivel); return `<button type="button" class="sc-esc" aria-pressed="${S.esc === e.id}" data-esc="${e.id}"><span class="sc-ico" aria-hidden="true">${e.ico}</span><b>${esc(L(e.tit))}</b><span>${esc(L(e.sub))}</span><small>${esc(t('p. {0}', e.p))}${m >= 0 ? ' · ' + esc(t('mejor: {0} %', m)) : ''}</small></button>`; }).join('')}</div>`).join('');
+  $('escenarios').innerHTML = [1, 2, 3, 4].map(f => `<h4 class="sc-fase">${esc(t(FASES[f]))}</h4><div class="sc-escs">${ESC.filter(e => e.fase === f).map(e => { const m = mejor(e.id, S.nivel); return `<button type="button" class="sc-esc" aria-pressed="${S.esc === e.id}" data-esc="${e.id}"><span class="sc-ico" aria-hidden="true">${e.ico}</span><b>${esc(L(e.tit))}</b><span>${esc(L(e.sub))}</span>${m >= 0 ? `<small>${esc(t('mejor: {0} %', m))}</small>` : ''}</button>`; }).join('')}</div>`).join('');
   $$('#escenarios [data-esc]').forEach(b => b.onclick = () => { S.esc = b.dataset.esc; guarda(); pintaPrep(); });
   $('selVel').value = String(S.vel); $('alias').value = S.alias; $('chkHabla').checked = S.habla; $('chkIA').checked = S.ia; $('chkInstr').checked = S.instr;
   $('nivelAyuda').textContent = t('El nivel decide qué órdenes puedes ejecutar y qué puntos de la rúbrica se te exigen.');
@@ -86,8 +86,8 @@ function nuevaSim() {
 function pintaSim() {
   if (!SIM.run) nuevaSim();
   const e = SIM.esc;
-  $('briefTxt').innerHTML = `<p><b>${esc(L(e.tit))}</b> · ${esc(L(e.sub))} · ${esc(t('nivel {0}', S.nivel))} · ${esc(t('p. {0}', e.p))}</p><p>${esc(L(e.brief))}</p>`;
-  $('chuleta').innerHTML = Object.keys(CATS).map(c => { const ids = ACC_IDS.filter(id => ACC[id].c === c && ACC[id].min <= NIV[S.nivel]); return ids.length ? `<h4 class="sc-fase">${esc(t(CATS[c]))}</h4><ul class="sc-ul">${ids.map(id => `<li><b>${esc(nomAcc(id))}</b> — «${esc(L(ACC[id].k).split('|')[0].trim())}» <small class="muted">p. ${esc(ACC[id].p)}</small></li>`).join('')}</ul>` : ''; }).join('');
+  $('briefTxt').innerHTML = `<p><b>${esc(L(e.tit))}</b> · ${esc(L(e.sub))} · ${esc(t('nivel {0}', S.nivel))}</p><p>${esc(L(e.brief))}</p>`;
+  $('chuleta').innerHTML = Object.keys(CATS).map(c => { const ids = ACC_IDS.filter(id => ACC[id].c === c && ACC[id].min <= NIV[S.nivel]); return ids.length ? `<h4 class="sc-fase">${esc(t(CATS[c]))}</h4><ul class="sc-ul">${ids.map(id => `<li><b>${esc(nomAcc(id))}</b> — «${esc(L(ACC[id].k).split('|')[0].trim())}»</li>`).join('')}</ul>` : ''; }).join('');
   $('panelInstr').hidden = !S.instr;
   if (S.instr) $('panelInstr').innerHTML = `<h3>${esc(t('Consola del instructor'))}</h3><p class="help">${esc(t('Afecta a la baja seleccionada. Queda en el registro.'))}</p><div class="sc-chips">${INYECCIONES.map(i => `<button type="button" class="btn btn-ghost btn-sm" data-iny="${i}">${esc(t(NOM_INY[i]))}</button>`).join('')}</div>`;
   $$('#panelInstr [data-iny]').forEach(b => b.onclick = () => { const ev = inyecta(SIM.st, b.dataset.iny, SIM.st.act); SIM.st.log.push({t: Math.round(SIM.st.t), a: '_iny_' + b.dataset.iny, b: ev.b, fase: SIM.st.fase}); refresca(); });
@@ -311,7 +311,7 @@ function finaliza() {
   if (!SIM.run) return; SIM.run = false; paraReloj(); VOZ.para(); $('chkManos').checked = false; SIM.decPend = null; SIM.form = null;
   const st = SIM.st, e = SIM.esc, r = rubrica(st, e);
   const R = {app: APP, version: VERSION, alias: S.alias || t('anónimo'), codigo: `${e.id}.${S.nivel}.${S.vel}`, esc: e.id, nivel: S.nivel, fecha: new Date().toISOString(), dur: Math.round(st.t), demo: SIM.demo,
-    pct: r.pct, pts: r.pts, max: r.max, apto: r.apto, fallosCrit: r.fallosCrit, items: r.items.map(i => ({id: i.id, ok: i.ok, crit: i.crit, p: i.p})),
+    pct: r.pct, pts: r.pts, max: r.max, apto: r.apto, fallosCrit: r.fallosCrit, items: r.items.map(i => ({id: i.id, ok: i.ok, crit: i.crit})),
     log: st.log.map(l => ({t: l.t, a: l.a, b: l.b, ok: l.ok !== false, fuera: !!l.fuera, cod: l.cod || null, fase: l.fase, n: l.n ?? null})),
     bajas: st.bajas.map(b => ({id: b.id, muerto: b.muerto, causa: b.causa, cat: b.cat, catOk: b.catOk, vit: vitales(b)})), forms: Object.fromEntries(Object.entries(st.form).map(([k, f]) => [k, {r: f.r, val: f.val, b: f.b}])), dec: st.dec};
   S.ult = R; if (!SIM.demo) S.hist = [...S.hist, {esc: R.esc, nivel: R.nivel, pct: R.pct, apto: R.apto, fecha: R.fecha, fallos: R.items.filter(i => !i.ok).map(i => i.id)}].slice(-200);
@@ -325,42 +325,41 @@ function pintaDebrief() {
   const e = escDe(R.esc);
   const forms = Object.entries(R.forms || {}).map(([k, f]) => `<h4 class="sc-fase">${esc(k === 'medevac' ? t('Petición de evacuación (9 líneas)') : t('Informe MIST') + ' · ' + f.b)}</h4><ul class="sc-ul">${Object.entries(f.val).map(([c, v]) => `<li>${v[0] ? '✓' : '⚠'} <b>${esc(c.toUpperCase())}</b> «${esc(f.r[c] || '')}» — ${esc(fmtVal(v))}</li>`).join('')}</ul>`).join('');
   $('debrief').innerHTML = `<div class="card sc-nota ${R.apto ? 'ok' : 'ko'}"><div><span class="sc-big">${R.pct} %</span><b>${R.apto ? esc(t('APTO')) : esc(t('NO APTO'))}</b></div><p>${esc(L(e.tit))} · ${esc(L(e.sub))} · ${esc(t('nivel {0}', R.nivel))} · ${mmss(R.dur)} · ${esc(R.alias)}${R.demo ? ' · ' + esc(t('ejemplo automático')) : ''}</p><p>${esc(t('{0} de {1} puntos · {2} fallo(s) crítico(s). Se necesita un 70 % y ningún fallo crítico.', R.pts, R.max, R.fallosCrit))}</p></div>
-  <div class="card"><h3>${esc(t('Rúbrica'))}</h3><div class="table-wrap"><table><thead><tr><th></th><th>${esc(t('Punto'))}</th><th>${esc(t('Página'))}</th></tr></thead><tbody>${R.items.map(i => `<tr><td>${i.ok ? '✓' : '✗'}</td><td>${esc(itemTxt(e, i.id))}${i.crit ? ` <span class="fa-chip error">${esc(t('crítico'))}</span>` : ''}</td><td>p. ${esc(i.p)}</td></tr>`).join('')}</tbody></table></div></div>
+  <div class="card"><h3>${esc(t('Rúbrica'))}</h3><div class="table-wrap"><table><thead><tr><th></th><th>${esc(t('Punto'))}</th></tr></thead><tbody>${R.items.map(i => `<tr><td>${i.ok ? '✓' : '✗'}</td><td>${esc(itemTxt(e, i.id))}${i.crit ? ` <span class="fa-chip error">${esc(t('crítico'))}</span>` : ''}</td></tr>`).join('')}</tbody></table></div></div>
   <div class="card"><h3>${esc(t('Estado final de las bajas'))}</h3><ul class="sc-ul">${R.bajas.map(b => `<li><b>${esc(b.id)}</b>: ${b.muerto ? esc(t('fallecida ({0})', t(b.causa || ''))) : esc(t('viva · FC {0} · TAS {1} · SpO₂ {2} % · {3} · {4} °C', b.vit.fc, b.vit.tas, b.vit.spo2, b.vit.avdn, b.vit.temp))}${b.catOk ? ' · ' + esc(t('triaje: {0} (correcto: {1})', b.cat ? t(b.cat.toUpperCase()) : '—', t(b.catOk.toUpperCase()))) : ''}</li>`).join('')}</ul>${forms}</div>
   <div class="card"><h3>${esc(t('Línea de tiempo'))}</h3><div class="table-wrap"><table><thead><tr><th>${esc(t('Tiempo'))}</th><th>${esc(t('Orden'))}</th><th>${esc(t('Baja'))}</th><th>${esc(t('Observación'))}</th></tr></thead><tbody>${R.log.map(l => `<tr><td>${mmss(l.t)}</td><td>${esc(nomLog(l.a))}${l.n ? ' · ' + esc(String(l.n).toUpperCase()) : ''}</td><td>${esc(l.b)}</td><td>${l.fuera ? `<span class="fa-chip error">${esc(t('fuera de tu nivel'))}</span>` : ''}${l.cod ? `<span class="fa-chip aviso">${esc(t(COD_TXT[l.cod] || l.cod))}</span>` : ''}${l.fase === 'cuf' ? ` <span class="fa-chip">${esc(t('bajo fuego'))}</span>` : ''}${!l.ok && !l.fuera && !l.cod ? `<span class="fa-chip aviso">${esc(t('sin efecto'))}</span>` : ''}</td></tr>`).join('')}</tbody></table></div></div>`;
   $('iaDeb').hidden = false;
 }
 $('btnRepetir').onclick = () => { if (S.ult) { S.esc = S.ult.esc; S.nivel = S.ult.nivel; } SIM.run = false; go(2); };
 $('btnOtro').onclick = () => go(1);
-/* comentario de la IA: solo consejos; el código comprueba que las páginas citadas existen en esta sesión */
+/* comentario de la IA: solo consejos; cada consejo se ancla a un punto de la rúbrica y el código comprueba que ese punto existe en la sesión */
 $('btnIADeb').onclick = async () => {
   const R = S.ult; if (!R) return; if (!pideClave()) return;
-  const e = escDe(R.esc), pags = new Set(); const addP = p => String(p).split(/[,\s]+/).forEach(x => { const m = x.match(/^(\d+)-(\d+)$/); if (m) for (let k = +m[1]; k <= +m[2]; k++) pags.add(String(k)); else if (x) pags.add(x); });
-  R.items.forEach(i => addP(i.p)); R.log.forEach(l => ACC[l.a] && addP(ACC[l.a].p));
-  const prompt = `Eres instructor de atención táctica a bajas (TCCC, NSOCM Handbook 2023). Escenario: ${tx3(e.tit, 'es')} (${tx3(e.sub, 'es')}). Nivel ${R.nivel}. Resultado calculado por código: ${R.pct} % (${R.apto ? 'APTO' : 'NO APTO'}).
-Rúbrica (ok=logrado):
-${R.items.map(i => `- [${i.ok ? 'ok' : 'NO'}${i.crit ? ', crítico' : ''}] ${itemTxt(e, i.id)} (p. ${i.p})`).join('\n')}
+  const e = escDe(R.esc), ids = new Set(R.items.map(i => i.id));
+  const prompt = `Eres instructor de atención táctica a bajas (TCCC). Escenario: ${tx3(e.tit, 'es')} (${tx3(e.sub, 'es')}). Nivel ${R.nivel}. Resultado calculado por código: ${R.pct} % (${R.apto ? 'APTO' : 'NO APTO'}).
+Rúbrica (id · ok=logrado):
+${R.items.map(i => `- ${i.id} [${i.ok ? 'ok' : 'NO'}${i.crit ? ', crítico' : ''}] ${itemTxt(e, i.id)}`).join('\n')}
 Secuencia de órdenes (mm:ss, orden, baja, incidencia):
 ${R.log.map(l => `${mmss(l.t)} ${nomLog(l.a)} ${l.b}${l.fuera ? ' FUERA DE NIVEL' : ''}${l.cod ? ' ' + l.cod : ''}`).join('\n')}
-Redacta de 3 a 6 consejos concretos y accionables para la próxima vez, centrados en lo NO logrado y en el orden de las acciones. No cambies ni discutas la nota. Cada consejo cita UNA página de esta lista y de ninguna otra: ${[...pags].join(', ')}.
-Devuelve SOLO este JSON: {"consejos":[{"texto":"…","p":"número de página"}]}
+Redacta de 3 a 6 consejos concretos y accionables para la próxima vez, centrados en lo NO logrado y en el orden de las acciones. No cambies ni discutas la nota. Cada consejo indica el id del punto de la rúbrica al que se refiere (uno de la lista y de ninguna otra).
+Devuelve SOLO este JSON: {"consejos":[{"texto":"…","punto":"id"}]}
 ${INSTR_IDIOMA()}`;
   if (!(await pideEnvio(prompt))) return;
   $('iaDebTxt').innerHTML = '<p><span class="spin"></span> ' + esc(t('Consultando a tu IA…')) + '</p>';
   try {
     const j = await llmJSON([{role: 'system', content: 'Respondes SOLO con JSON válido.'}, {role: 'user', content: prompt}], {max: 1200});
-    const cs = (j.consejos || []).map(c => ({texto: String(c.texto || ''), p: String(c.p || '').replace(/^p\.?\s*/i, '').trim()})).filter(c => c.texto);
-    R.ia = cs.map(c => ({...c, ok: c.p.split(/[,\s-]+/).filter(Boolean).every(x => pags.has(x))})); guardaYa();
-    $('iaDebTxt').innerHTML = pintaIA(R.ia);
+    const cs = (j.consejos || []).map(c => ({texto: String(c.texto || ''), punto: String(c.punto || '').trim()})).filter(c => c.texto);
+    R.ia = cs.map(c => ({...c, ok: ids.has(c.punto)})); guardaYa();
+    $('iaDebTxt').innerHTML = pintaIA(R.ia, e);
   } catch (err) { $('iaDebTxt').innerHTML = `<p class="aviso">${esc(err.message)}</p>`; }
 };
-const pintaIA = cs => `<ul class="sc-ul">${cs.map(c => `<li>${esc(c.texto)} <small>${c.ok ? '✓ p. ' + esc(c.p) : '⚠ ' + esc(t('la página «{0}» no está en esta sesión: compruébala', c.p))}</small></li>`).join('')}</ul><p class="help">${esc(t('Redactado por la IA. No modifica la nota.'))}</p>`;
+const pintaIA = (cs, e) => `<ul class="sc-ul">${cs.map(c => `<li>${esc(c.texto)} <small>${c.ok ? '✓ ' + esc(itemTxt(e, c.punto)) : '⚠ ' + esc(t('el punto «{0}» no existe en esta rúbrica: compruébalo', c.punto))}</small></li>`).join('')}</ul><p class="help">${esc(t('Redactado por la IA. No modifica la nota.'))}</p>`;
 /* descargas */
 function informeMd(R) {
   const e = escDe(R.esc);
-  return `## ${t('Resultado')}\n**${R.pct} % · ${R.apto ? t('APTO') : t('NO APTO')}** — ${t('{0} de {1} puntos · {2} fallo(s) crítico(s). Se necesita un 70 % y ningún fallo crítico.', R.pts, R.max, R.fallosCrit)}\n\n${t('Escenario')}: ${L(e.tit)} (${L(e.sub)}) · ${t('nivel {0}', R.nivel)} · ${t('Tiempo')}: ${mmss(R.dur)} · ${t('Código de sesión')}: ${R.codigo}\n\n## ${t('Rúbrica')}\n${R.items.map(i => `- ${i.ok ? '✓' : '✗'} ${itemTxt(e, i.id)}${i.crit ? ' (' + t('crítico') + ')' : ''} — p. ${i.p}`).join('\n')}\n\n## ${t('Estado final de las bajas')}\n${R.bajas.map(b => `- ${b.id}: ${b.muerto ? t('fallecida ({0})', t(b.causa || '')) : t('viva · FC {0} · TAS {1} · SpO₂ {2} % · {3} · {4} °C', b.vit.fc, b.vit.tas, b.vit.spo2, b.vit.avdn, b.vit.temp)}`).join('\n')}\n\n## ${t('Línea de tiempo')}\n${R.log.map(l => `- ${mmss(l.t)} · ${nomLog(l.a)} · ${l.b}${l.fuera ? ' · ' + t('fuera de tu nivel') : ''}${l.cod ? ' · ' + t(COD_TXT[l.cod] || l.cod) : ''}`).join('\n')}${R.ia ? `\n\n## ${t('Comentario del instructor (IA, opcional)')}\n${R.ia.map(c => `- ${c.texto} (p. ${c.p}${c.ok ? '' : ' ⚠'})`).join('\n')}` : ''}`;
+  return `## ${t('Resultado')}\n**${R.pct} % · ${R.apto ? t('APTO') : t('NO APTO')}** — ${t('{0} de {1} puntos · {2} fallo(s) crítico(s). Se necesita un 70 % y ningún fallo crítico.', R.pts, R.max, R.fallosCrit)}\n\n${t('Escenario')}: ${L(e.tit)} (${L(e.sub)}) · ${t('nivel {0}', R.nivel)} · ${t('Tiempo')}: ${mmss(R.dur)} · ${t('Código de sesión')}: ${R.codigo}\n\n## ${t('Rúbrica')}\n${R.items.map(i => `- ${i.ok ? '✓' : '✗'} ${itemTxt(e, i.id)}${i.crit ? ' (' + t('crítico') + ')' : ''}`).join('\n')}\n\n## ${t('Estado final de las bajas')}\n${R.bajas.map(b => `- ${b.id}: ${b.muerto ? t('fallecida ({0})', t(b.causa || '')) : t('viva · FC {0} · TAS {1} · SpO₂ {2} % · {3} · {4} °C', b.vit.fc, b.vit.tas, b.vit.spo2, b.vit.avdn, b.vit.temp)}`).join('\n')}\n\n## ${t('Línea de tiempo')}\n${R.log.map(l => `- ${mmss(l.t)} · ${nomLog(l.a)} · ${l.b}${l.fuera ? ' · ' + t('fuera de tu nivel') : ''}${l.cod ? ' · ' + t(COD_TXT[l.cod] || l.cod) : ''}`).join('\n')}${R.ia ? `\n\n## ${t('Comentario del instructor (IA, opcional)')}\n${R.ia.map(c => `- ${c.texto}${c.ok ? '' : ' ⚠'}`).join('\n')}` : ''}`;
 }
-$('btnWord').onclick = async () => { const R = S.ult; if (!R) return toast(t('Aún no has hecho ninguna simulación.')); try { dl(`debriefing_${R.esc}_${R.nivel}.docx`, await wordDeMarkdown(informeMd(R), {titulo: APP_NAME + ' · ' + t('Debriefing'), subtitulo: `${R.alias} · ${new Date(R.fecha).toLocaleString(locale())}`, pie: t('Generado con {0} v{1}. Fisiología y rúbrica calculadas por código a partir del NSOCM Handbook 2023. Herramienta formativa: no aplicar a pacientes reales.', APP_NAME, VERSION)})); } catch (err) { toast(err.message, 7000); } };
+$('btnWord').onclick = async () => { const R = S.ult; if (!R) return toast(t('Aún no has hecho ninguna simulación.')); try { dl(`debriefing_${R.esc}_${R.nivel}.docx`, await wordDeMarkdown(informeMd(R), {titulo: APP_NAME + ' · ' + t('Debriefing'), subtitulo: `${R.alias} · ${new Date(R.fecha).toLocaleString(locale())}`, pie: t('Generado con {0} v{1}. Fisiología y rúbrica calculadas por código. Herramienta formativa: no aplicar a pacientes reales.', APP_NAME, VERSION)})); } catch (err) { toast(err.message, 7000); } };
 $('btnJson').onclick = () => { const R = S.ult; if (!R) return toast(t('Aún no has hecho ninguna simulación.')); dl(`resultado_${slug(R.alias)}_${R.esc}_${R.nivel}.json`, JSON.stringify(R, null, 1), 'application/json'); };
 $('btnCsv').onclick = () => { const R = S.ult; if (!R) return toast(t('Aún no has hecho ninguna simulación.')); dl(`registro_${R.esc}.csv`, csvDe([t('tiempo'), t('orden'), t('baja'), t('fase'), t('fuera de nivel'), t('incidencia')], R.log.map(l => [mmss(l.t), nomLog(l.a), l.b, l.fase, l.fuera ? t('sí') : t('no'), l.cod ? t(COD_TXT[l.cod] || l.cod) : ''])), 'text/csv;charset=utf-8'); };
 
@@ -383,10 +382,10 @@ $('iFiles').onchange = async e => {
 function pintaAgreg() {
   const A = S.agreg; if (!A.length) { $('iTabla').innerHTML = `<p class="empty">${esc(t('Todavía no hay resultados.'))}</p>`; return; }
   const filas = A.map(r => `<tr><td>${esc(r.alias)}</td><td>${esc(L(escDe(r.esc).tit))}</td><td>${esc(r.nivel)}</td><td><b>${r.pct} %</b></td><td>${r.apto ? '✓' : '✗'}</td><td>${r.fallosCrit}</td><td>${esc(new Date(r.fecha).toLocaleDateString(locale()))}</td></tr>`).join('');
-  const porItem = {}; A.forEach(r => r.items.forEach(i => { const k = r.esc + '|' + i.id; (porItem[k] = porItem[k] || {esc: r.esc, id: i.id, n: 0, ok: 0, crit: i.crit, p: i.p}); porItem[k].n++; if (i.ok) porItem[k].ok++; }));
+  const porItem = {}; A.forEach(r => r.items.forEach(i => { const k = r.esc + '|' + i.id; (porItem[k] = porItem[k] || {esc: r.esc, id: i.id, n: 0, ok: 0, crit: i.crit}); porItem[k].n++; if (i.ok) porItem[k].ok++; }));
   const dif = Object.values(porItem).sort((a, b) => a.ok / a.n - b.ok / b.n).slice(0, 12);
   $('iTabla').innerHTML = `<div class="table-wrap"><table><thead><tr><th>${esc(t('Seudónimo'))}</th><th>${esc(t('Escenario'))}</th><th>${esc(t('Nivel'))}</th><th>%</th><th>${esc(t('APTO'))}</th><th>${esc(t('Fallos críticos'))}</th><th>${esc(t('Fecha'))}</th></tr></thead><tbody>${filas}</tbody></table></div>
-    <h4 class="sc-fase">${esc(t('Puntos que más cuestan al grupo'))}</h4><div class="table-wrap"><table><thead><tr><th>${esc(t('Punto'))}</th><th>${esc(t('Logrado'))}</th><th>${esc(t('Página'))}</th></tr></thead><tbody>${dif.map(d => `<tr><td>${esc(L(escDe(d.esc).tit))}: ${esc(itemTxt(escDe(d.esc), d.id))}${d.crit ? ` <span class="fa-chip error">${esc(t('crítico'))}</span>` : ''}</td><td>${Math.round(d.ok / d.n * 100)} % (${d.ok}/${d.n})</td><td>p. ${esc(d.p)}</td></tr>`).join('')}</tbody></table></div>`;
+    <h4 class="sc-fase">${esc(t('Puntos que más cuestan al grupo'))}</h4><div class="table-wrap"><table><thead><tr><th>${esc(t('Punto'))}</th><th>${esc(t('Logrado'))}</th></tr></thead><tbody>${dif.map(d => `<tr><td>${esc(L(escDe(d.esc).tit))}: ${esc(itemTxt(escDe(d.esc), d.id))}${d.crit ? ` <span class="fa-chip error">${esc(t('crítico'))}</span>` : ''}</td><td>${Math.round(d.ok / d.n * 100)} % (${d.ok}/${d.n})</td></tr>`).join('')}</tbody></table></div>`;
 }
 $('iCsv').onclick = () => { if (!S.agreg.length) return toast(t('Todavía no hay resultados.')); dl('resumen_grupo.csv', csvDe([t('Seudónimo'), t('Escenario'), t('Nivel'), '%', t('APTO'), t('Fallos críticos'), t('Fecha'), t('Puntos no logrados')], S.agreg.map(r => [r.alias, L(escDe(r.esc).tit), r.nivel, r.pct, r.apto ? t('sí') : t('no'), r.fallosCrit, r.fecha, r.items.filter(i => !i.ok).map(i => itemTxt(escDe(r.esc), i.id)).join(' | ')])), 'text/csv;charset=utf-8'); };
 $('iBorrar').onclick = () => { if (!confirm(t('¿Vaciar los resultados reunidos en este navegador?'))) return; S.agreg = []; guardaYa(); pintaAgreg(); };
@@ -396,7 +395,7 @@ function pintaOrdenes() {
   detenSim();
   const q = normz($('ordBusca').value);
   const ids = ACC_IDS.filter(id => !q || normz(nomAcc(id) + ' ' + L(ACC[id].k)).includes(q));
-  $('ordTabla').innerHTML = `<table><thead><tr><th>${esc(t('Orden'))}</th><th>${esc(t('Desde el nivel'))}</th><th>${esc(t('Página'))}</th><th>${esc(t('Puedes decir, por ejemplo'))}</th></tr></thead><tbody>${ids.map(id => `<tr><td><b>${esc(nomAcc(id))}</b><br><small class="muted">${esc(t(CATS[ACC[id].c]))}</small></td><td>${NIVELES[ACC[id].min]}</td><td>p. ${esc(ACC[id].p)}</td><td>${L(ACC[id].k).split('|').slice(0, 4).map(k => '«' + esc(k.trim()) + '»').join(' · ')}</td></tr>`).join('')}</tbody></table>`;
+  $('ordTabla').innerHTML = `<table><thead><tr><th>${esc(t('Orden'))}</th><th>${esc(t('Desde el nivel'))}</th><th>${esc(t('Puedes decir, por ejemplo'))}</th></tr></thead><tbody>${ids.map(id => `<tr><td><b>${esc(nomAcc(id))}</b><br><small class="muted">${esc(t(CATS[ACC[id].c]))}</small></td><td>${NIVELES[ACC[id].min]}</td><td>${L(ACC[id].k).split('|').slice(0, 4).map(k => '«' + esc(k.trim()) + '»').join(' · ')}</td></tr>`).join('')}</tbody></table>`;
 }
 $('ordBusca').oninput = pintaOrdenes;
 
